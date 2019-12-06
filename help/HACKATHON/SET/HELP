@@ -1,0 +1,8 @@
+Syntax:  HACKATHON SET <name of hackathon> <setting> <value>
+Settings:  STARTTIME               - Time hackathon will start.
+           ENDTIME                 - Time hackathon will end. 
+           REGISTRATION_LENGTH     - Amount of time before STARTTIME for registration.
+           REGISTRATION_FEE        - Fee to enter.
+           REGISTRATION_JUDGE_TYPE - Open judging or invite only.
+           REGISTRATION_JUDGE_FEE  - Fee for judge to enter if open judging.
+           RAKE                    - Rake
