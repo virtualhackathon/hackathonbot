@@ -1,0 +1,3 @@
+Syntax:  VERIFY <signed challenge response>
+
+Allows you to verify yourself as the owner of the handshake name that you have identified to.
