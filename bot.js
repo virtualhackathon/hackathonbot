@@ -26,8 +26,12 @@ client.addListener('pm',function(sender,msg) {
         if(input.length>0) {
           input=input.replace(".","").replace("/","").replace(" ","/").toUpperCase();
 
-          if(fs.existsSync(process.cwd()+"/help/"+input))
+          if(fs.existsSync(process.cwd()+"/help/"+input)) {
+            if(fs.lstatSync(process.cwd()+"/help/"+input).isDirectory()) {
+              input+="/HELP"
+            }
             arrayToClientNotice(sender,fileToStringArray(process.cwd()+"/help/"+input));
+          }
           else {
             arrayToClientNotice(sender,["Sorry, but "+input.replace("\/"," ")+" does not exist in our documentation.",
                                 "Are you sure you typed it correctly?"]);
@@ -40,6 +44,8 @@ client.addListener('pm',function(sender,msg) {
       case "IDENTIFY":
       case "VERIFY":
       case "HACKATHON":
+
+        break;
       default:
         break;
     }
