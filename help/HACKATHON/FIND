@@ -1,0 +1,5 @@
+Syntax:  HACKATHON FIND <string>
+
+Lists hackathons matching <string>.
+
+
