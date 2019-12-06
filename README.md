@@ -4,7 +4,7 @@ Virtual Hackathon Bot for running Virtual Hackathons.
 Extremely a WIP.
 
 # Requirements
-node install irc
+npm install irc
 
 # How to use
 node bot.js
