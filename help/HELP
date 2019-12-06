@@ -1,0 +1,6 @@
+The following commands have more documentation available.
+IDENTIFY - Identify to a Internet Name
+VERIFY - Complete ownership verification of your Internet Name
+HACKATHON - Controls all hackathon related commands
+
+Message HELP <command> for more information.
