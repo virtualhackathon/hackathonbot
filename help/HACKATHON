@@ -1,0 +1,8 @@
+Syntax:  HACKATHON <command> <parameters>
+
+LIST - List existing hackathons
+FIND - Find hackathons matching criteria
+
+CREATE - Create a hackathon
+SET - Set options on a hackathon
+
