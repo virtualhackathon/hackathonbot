@@ -44,7 +44,28 @@ client.addListener('pm',function(sender,msg) {
       case "IDENTIFY":
       case "VERIFY":
       case "HACKATHON":
-
+        words=input.split(" ");
+        input=input.substr(words[0].length+1);
+        if(words.length>0) {
+          switch(words[0].toUpperCase()) {
+            case "JOIN":
+            case "GJOIN":
+            case "LIST":
+            case "FIND":
+            case "CREATE":
+/*              if(input.length>0) {
+                if(input.indexOf(' ')==-1||) {
+                createHackathon(sender,input,
+                }
+                el
+              }
+*/              break;
+            case "SET":
+              break;
+            default:
+              break;
+          }
+        }
         break;
       default:
         break;
@@ -62,3 +83,4 @@ function arrayToClientNotice(target,payload) {
     client.notice(target,line);
   });
 }
+
