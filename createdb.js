@@ -48,6 +48,14 @@ if(!fs.existsSync('./bot.db')) {
                 PRIZE_AMOUNT,
                 HACKER INTEGER
               );`);
+      db.run(`CREATE TABLE CHALLENGES(
+                CHALLENGE INTEGER PRIMARY KEY AUTOINCREMENT,
+                NICKNAME TEXT,
+                NAME TEXT,
+                MESSAGE TEXT,
+                ADDRESS TEXT
+                REQUESTAT CHAR(12)
+              );`);
       console.log("Completed creation of bot.db");
     }
   });
