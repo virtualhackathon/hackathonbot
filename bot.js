@@ -51,15 +51,13 @@ client.addListener('pm',async function(sender,msg) {
           input=input.replace(".","").replace("/","").replace(" ","/").toUpperCase();
 
           if(fs.existsSync(process.cwd()+"/help/"+input)) {
-            if(fs.lstatSync(process.cwd()+"/help/"+input).isDirectory()) {
+            if(fs.lstatSync(process.cwd()+"/help/"+input).isDirectory())
               input+="/HELP"
-            }
             arrayToClientNotice(sender,fileToStringArray(process.cwd()+"/help/"+input));
           }
-          else {
+          else
             arrayToClientNotice(sender,["Sorry, but "+input.replace("\/"," ")+" does not exist in our documentation.",
                                 "Are you sure you typed it correctly?"]);
-          }
         }
         else
           arrayToClientNotice(sender,fileToStringArray(process.cwd()+"/help/HELP"));
@@ -73,16 +71,15 @@ client.addListener('pm',async function(sender,msg) {
           ownerHash=result.owner.hash;
           ownerIndex=result.owner.index;
         })();
-        if(ownerHash=="") {
+        if(ownerHash=="")
           client.notice(sender, "The name, "+input+", was not found on the blockchain.");
-        }
         else {
           await (async function() {
             const result = await nodeclient.getCoin(ownerHash, ownerIndex);
             address=result.address;
           })();
           /* Create and save a CHALLENGE and the owner address in DB */
-          var challenge=randomstring(64);
+          var challenge=randomString(64);
           db.run(`INSERT INTO CHALLENGES (NICKNAME, NAME, MESSAGE, ADDRESS, REQUEST_AT) VALUES(?, ?, ?, ?, ?);`,
                   [sender, input, challenge, address, Math.floor(Date.now() / 1000)]);
 
@@ -103,16 +100,14 @@ client.addListener('pm',async function(sender,msg) {
             })();
             if(verified) {
               db.get(`SELECT * FROM HACKERS WHERE NICKNAME = ?`,[sender],function(verr,vrow) {
-                if(verr) {
+                if(verr)
                   /* Create an entry in db */
                   db.run(`INSERT INTO HACKERS (NAME, NICKNAME, ONLINE) VALUES(?,?,?);`,
                           [row.NAME, sender, 1]);
-                }
-                else {
+                else
                   /* Just update online status */
                   db.run(`UPDATE HACKERS SET ONLINE = 1 WHERE NAME = ?`,
                           [row.NAME]);
-                }
                 client.notice(sender, "You are now verified as the owner of "+row.NAME);
               });
             }
@@ -161,10 +156,10 @@ function arrayToClientNotice(target,payload) {
     client.notice(target,line);
   });
 }
-function randomstring(size,word) {
+function randomString(size,word) {
   const letter="abcdefghijklmnopqrstuvwxyz0123456789";
   if(word==undefined || word.length!=size)
-    return randomstring(size,(word==undefined?"":word)+letter.substr((Math.floor(Math.random() * Math.floor(36))),1));
+    return randomString(size,(word==undefined?"":word)+letter.substr((Math.floor(Math.random() * Math.floor(36))),1));
   return word;
 }
 

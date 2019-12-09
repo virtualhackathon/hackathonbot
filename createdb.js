@@ -25,6 +25,7 @@ if(!fs.existsSync('./bot.db')) {
                 REGISTRATION_FEE REAL,
                 REGISTRATION_JUDGE_TYPE INTEGER,
                 REGISTRATION_JUDGE_FEE REAL,
+                REGISTRATION_SPONSOR_FEE REAL,
                 RAKE REAL
               );`);
       db.run(`CREATE TABLE JUDGES(
@@ -40,7 +41,8 @@ if(!fs.existsSync('./bot.db')) {
                 TOURNAMENT INTEGER PRIMARY KEY AUTOINCREMENT,
                 HACKATHON INTEGER,
                 TOURNAMENT_NAME TEXT,
-                TOURNAMENT_DESC TEXT
+                TOURNAMENT_DESC TEXT,
+                PURSE_PERCENT REAL
               );`);
       db.run(`CREATE TABLE PRIZES(
                 PRIZE INTEGER PRIMARY KEY AUTOINCREMENT,
