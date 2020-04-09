@@ -1,0 +1,24 @@
+#!/bin/env node
+
+const DBServer = require('../lib/dbserver');
+
+const server = new DBServer({
+  logLevel: 'info',
+  logConsole: true
+});
+
+process.on('unhandledRejection', (err, promise) => {
+  throw err;
+});
+
+process.on('SIGINT', async () => {
+  await server.close();
+});
+
+(async () => {
+  await server.ensure();
+  await server.open();
+})().catch((err) => {
+  console.error(err.stack);
+  process.exit(1);
+});
