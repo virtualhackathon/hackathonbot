@@ -1,4 +1,4 @@
-#!/bin/env -S node debug
+#!/bin/env node
 
 const Hackathond = require('../lib/hackathond');
 
