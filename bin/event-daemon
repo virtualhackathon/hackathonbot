@@ -19,6 +19,9 @@ process.on('SIGINT', async () => {
   await manager.ensure();
   await manager.open();
 })().catch((err) => {
-  console.error(err.stack);
+  if (err.stack)
+    console.error(err.stack);
+  else
+    console.log(err)
   process.exit(1);
 });
