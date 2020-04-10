@@ -132,7 +132,7 @@ describe('HackathonDB', function() {
 
     {
       const userResult = await db.getUser(user.nick, user.server);
-      assert.equal(result.userId, userResult.id);
+      assert(userResult);
     }
 
     {
@@ -366,6 +366,14 @@ describe('HackathonDB', function() {
     assert.equal(users.length, 1);
 
     assert.deepEqual(users[0], user);
+  });
+
+  it('should get all events', async () => {
+    this.skip();
+
+    const events = await db.getEvents();
+
+    assert(events.length > 0);
   });
 
   it('should get address user pairs for event', async () => {

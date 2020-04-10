@@ -1,0 +1,249 @@
+#!/bin/env node
+
+'use strict';
+
+const Config = require('bcfg');
+const HackathondClient = require('../lib/httpclient');
+const assert = require('bsert');
+
+const ports = {
+  hackathond: 7870,
+  admin: 7871
+};
+
+class CLI {
+  constructor() {
+    this.config = new Config('hackathond', {
+      alias: {
+        'u': 'url',
+        'k': 'api-key',
+        's': 'ssl',
+        'h': 'httphost',
+        'p': 'httpport'
+      }
+    });
+
+    this.config.load({
+      argv: true,
+      env: true
+    });
+
+    this.admin = this.config.bool('admin', false);
+
+    this.argv = this.config.argv;
+
+    this.client = new HackathondClient({
+      url: this.config.str('url'),
+      apiKey: this.config.str('api-key'),
+      ssl: this.config.bool('ssl'),
+      host: this.config.str('http-host'),
+      port: this.config.uint('http-port') ||
+        this.admin ? ports.admin : ports.hackathond,
+      timeout: this.config.uint('timeout'),
+      admin: this.admin
+    });
+  }
+
+  log(json) {
+    if (typeof json === 'string')
+      return console.log.apply(console, arguments);
+    return console.log(JSON.stringify(json, null, 2));
+  }
+
+  async getInfo() {
+    const info = await this.client.getInfo();
+    this.log(info);
+  }
+
+  async getEvents() {
+    const events = await this.client.getEvents();
+    this.log(events);
+  }
+
+  async getEventInfo() {
+    const event = this.config.str(0, '');
+
+    const info = await this.client.getEventInfo(event);
+    this.log(info);
+  }
+
+  async getUser() {
+    const nick = this.config.str(0, '');
+    const server = this.config.str(1, '');
+
+    const info = await this.client.getUser(nick, server);
+
+    this.log(info);
+  }
+
+  async createUser() {
+    const nick = this.config.str('nick');
+    const link = this.config.str('link');
+    const isSponsor = this.config.bool('is-sponsor');
+    const server = this.config.str('server');
+
+    const user = await this.client.createUser({
+      nick,
+      link,
+      isSponsor,
+      server
+    });
+
+    this.log(user);
+  }
+
+  async getAddressInfo() {
+    const address = this.config.str(0, '');
+
+    const info = await this.client.getAddressInfo(address);
+
+    this.log(info)
+  }
+
+  async createAddress() {
+    const nick = this.config.str('nick');
+    const server = this.config.str('server');
+    const event = this.config.str('event');
+    const address = this.config.str('address');
+
+    const addr = await this.client.createAddress({
+      nick,
+      server,
+      event,
+      address
+    });
+
+    this.log(addr);
+  }
+
+  async createProof() {
+    throw new Error('Unimplemented.')
+
+
+    const proof = await this.client.createProof();
+    this.log(proof);
+  }
+
+  async createEvent() {
+    assert(this.admin);
+
+    const name = this.config.str('name');
+    const start = this.config.uint('start');
+    const end = this.config.uint('end');
+    const link = this.config.str('link');
+    const message = this.config.str('message');
+
+    const event = await this.client.createEvent({
+      name,
+      start,
+      end,
+      link,
+      message
+    });
+
+    this.log(event);
+  }
+
+  async userRegister() {
+    const nick = this.config.str('nick');
+    const server = this.config.str('server');
+    const event = this.config.str('event');
+
+    const register = await this.client.registerUser({
+      nick,
+      server,
+      event
+    });
+
+    this.log(register)
+  }
+
+  async getAddressInfo() {
+    const address = this.config.str(0, '');
+
+    const info = await this.client.getAddressInfo(address);
+
+    this.log(info);
+  }
+
+
+  async open() {
+    switch (this.argv.shift()) {
+      case 'info':
+        await this.getInfo();
+        break;
+      case 'events':
+        await this.getEvents();
+        break;
+      case 'eventinfo':
+        await this.getEventInfo();
+        break;
+      case 'user':
+        await this.getUser();
+        break;
+      case 'createuser':
+        await this.createUser();
+        break;
+      case 'address':
+        await this.getAddressInfo();
+        break;
+      case 'newaddress':
+        await this.createAddress();
+        break;
+      case 'proof':
+        await this.createProof();
+        break;
+      case 'register':
+        await this.userRegister();
+        break;
+      case 'newevent':
+        await this.createEvent();
+        break;
+      default:
+        this.log('Unrecognized command.');
+        this.log('Commands:');
+        this.log('  $ info: Get server info.');
+        this.log('  $ events: Get hackathon events.');
+        this.log('  $ eventinfo <name>: Get hackathon info.');
+        this.log('  $ user <nick> <server>: Get user info.');
+        this.log('  $ createuser: Create user.');
+        this.log('  $   --nick <string>');
+        this.log('  $   --link <string>');
+        this.log('  $   --is-sponsor <boolean>');
+        this.log('  $   --server <string>');
+        this.log('  $ address <address>: Get address info.');
+        this.log('  $ newaddress: Register address.');
+        this.log('      --nick <string>');
+        this.log('      --server <string>');
+        this.log('      --event <string>');
+        this.log('      --address <string>');
+        this.log('  $ proof: Prove address ownership.');
+        this.log('  $ register: Join an event.');
+        this.log('      --nick <string>');
+        this.log('      --server <string>');
+        this.log('      --event <string>');
+        this.log('Admin Commands (--admin true)');
+        this.log('  $ newevent: Create new event.');
+        this.log('      --name <string>');
+        this.log('      --start <unix timestamp>');
+        this.log('      --end <unix timestamp>');
+        this.log('      --link <hyperlink>');
+        this.log('      --message <string>');
+        break;
+    }
+  }
+
+  async destroy() {
+    if (this.client && this.client.opened)
+      await this.client.close();
+  }
+}
+
+(async () => {
+  const cli = new CLI();
+  await cli.open();
+  await cli.destroy();
+})().catch((err) => {
+  console.error(err.stack);
+  process.exit(1);
+});

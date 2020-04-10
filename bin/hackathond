@@ -1,10 +1,12 @@
-#!/bin/env node
+#!/bin/env -S node debug
 
-const DBServer = require('../lib/dbserver');
+const Hackathond = require('../lib/hackathond');
 
-const server = new DBServer({
+const server = new Hackathond({
   logLevel: 'info',
-  logConsole: true
+  logConsole: true,
+  env: true,
+  argv: true
 });
 
 process.on('unhandledRejection', (err, promise) => {

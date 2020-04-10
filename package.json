@@ -27,6 +27,7 @@
   "dependencies": {
     "bcfg": "^0.1.6",
     "bcrypto": "^5.1.0",
+    "bcurl": "^0.1.6",
     "bfile": "^0.2.2",
     "blgr": "^0.1.7",
     "bsert": "0.0.10",
