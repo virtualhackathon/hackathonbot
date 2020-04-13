@@ -5,7 +5,7 @@ BASEDIR="$SCRIPTSDIR/.."
 
 $BASEDIR/bin/event-daemon \
     --bot-nick BOT_NICK \
-    --irc.uri irc.imperialfamily.com \
+    --irc-uri irc.imperialfamily.com \
     --irc-channel '#hackathon' \
     --irc-admin-channel '#hackathon-admin' \
     --log-level debug \
