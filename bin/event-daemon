@@ -1,0 +1,27 @@
+#!/bin/env node
+
+const EventManager = require('../lib/eventmanager');
+
+const manager = new EventManager({
+  logLevel: 'info',
+  logConsole: true
+});
+
+process.on('unhandledRejection', (err, promise) => {
+  throw err;
+});
+
+process.on('SIGINT', async () => {
+  await manager.close();
+});
+
+(async () => {
+  await manager.ensure();
+  await manager.open();
+})().catch((err) => {
+  if (err.stack)
+    console.error(err.stack);
+  else
+    console.log(err)
+  process.exit(1);
+});

@@ -1,0 +1,41 @@
+{
+  "name": "hackathonbot",
+  "version": "1.0.0",
+  "description": "Virtual Hackathon Bot for running Virtual Hackathons.",
+  "main": "bot.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "bmocha test/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virtualhackathon/hackathonbot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/virtualhackathon/hackathonbot/issues"
+  },
+  "homepage": "https://github.com/virtualhackathon/hackathonbot#readme",
+  "devDependencies": {
+    "bmocha": "^2.1.3"
+  },
+  "dependencies": {
+    "ascii-table-unicode": "^0.1.1",
+    "bcfg": "^0.1.6",
+    "bcrypto": "^5.1.0",
+    "bcurl": "^0.1.6",
+    "bfile": "^0.2.2",
+    "blgr": "^0.1.7",
+    "bsert": "0.0.10",
+    "bval": "^0.1.6",
+    "bweb": "^0.1.10",
+    "irc": "^0.5.2",
+    "sqlite": "^4.0.5",
+    "sqlite3": "^4.1.1"
+  }
+}

@@ -1,0 +1,26 @@
+#!/bin/env node
+
+const Hackathond = require('../lib/hackathond');
+
+const server = new Hackathond({
+  logLevel: 'info',
+  logConsole: true,
+  env: true,
+  argv: true
+});
+
+process.on('unhandledRejection', (err, promise) => {
+  throw err;
+});
+
+process.on('SIGINT', async () => {
+  await server.close();
+});
+
+(async () => {
+  await server.ensure();
+  await server.open();
+})().catch((err) => {
+  console.error(err.stack);
+  process.exit(1);
+});
