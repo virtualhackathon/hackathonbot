@@ -9,4 +9,5 @@ $BASEDIR/bin/event-daemon \
     --irc-channel '#hackathon' \
     --irc-admin-channel '#hackathon-admin' \
     --log-level debug \
-    --irc-port 6667
+    --irc-port 6667 \
+    --log-level spam
