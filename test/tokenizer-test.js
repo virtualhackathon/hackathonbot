@@ -17,7 +17,8 @@ describe('Tokenizer', function() {
       [
         'key=value key2="this is a test"',
         {key: 'value', key2: '"this is a test"'}
-      ]
+      ],
+      ['key=0.001', {key: '0.001'}]
     ];
 
     for (const test of tests) {
