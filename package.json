@@ -27,14 +27,16 @@
   "dependencies": {
     "ascii-table-unicode": "^0.1.1",
     "bcfg": "^0.1.6",
+    "bclient": "^0.1.7",
     "bcrypto": "^5.1.0",
     "bcurl": "^0.1.6",
     "bfile": "^0.2.2",
-    "blgr": "^0.1.7",
+    "blgr": "https://github.com/Handshake-Protocol/blgr.git#v0.1.8",
     "bmutex": "^0.1.6",
     "bsert": "0.0.10",
     "bval": "^0.1.6",
     "bweb": "^0.1.10",
+    "hs-client": "0.0.8",
     "irc": "^0.5.2",
     "sqlite": "^4.0.5",
     "sqlite3": "^4.1.1"

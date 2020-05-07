@@ -8,7 +8,7 @@ const manager = new EventManager({
 });
 
 process.on('unhandledRejection', (err, promise) => {
-  throw err;
+  console.error(err);
 });
 
 process.on('SIGINT', async () => {
@@ -16,12 +16,18 @@ process.on('SIGINT', async () => {
 });
 
 (async () => {
-  await manager.ensure();
-  await manager.open();
+  try {
+    await manager.ensure();
+    await manager.open();
+  } catch (e) {
+    if (err.stack)
+      console.error(err.stack);
+    else
+      console.log(err);
+  }
 })().catch((err) => {
   if (err.stack)
     console.error(err.stack);
   else
     console.log(err)
-  process.exit(1);
 });
