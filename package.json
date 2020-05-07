@@ -31,7 +31,7 @@
     "bcrypto": "^5.1.0",
     "bcurl": "^0.1.6",
     "bfile": "^0.2.2",
-    "blgr": "^0.1.7",
+    "blgr": "https://github.com/Handshake-Protocol/blgr.git#v0.1.8",
     "bmutex": "^0.1.6",
     "bsert": "0.0.10",
     "bval": "^0.1.6",
