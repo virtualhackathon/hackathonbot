@@ -166,6 +166,15 @@ class CLI {
     this.log(info);
   }
 
+  async getPaymentAddress() {
+    const nick = this.config.str('nick');
+    const server = this.config.str('server');
+    const event = this.config.str('event');
+
+    const addresses = await this.client.getPaymentAddress(nick, server, event);
+
+    this.log(addresses);
+  }
 
   async open() {
     switch (this.argv.shift()) {
@@ -199,6 +208,9 @@ class CLI {
       case 'newevent':
         await this.createEvent();
         break;
+      case 'paymentaddress':
+        await this.getPaymentAddress();
+        break;
       default:
         this.log('Unrecognized command.');
         this.log('Commands:');
@@ -217,6 +229,10 @@ class CLI {
         this.log('      --server <string>');
         this.log('      --event <string>');
         this.log('      --address <string>');
+        this.log('  $ paymentaddress: Get payment address for user.');
+        this.log('      --nick <string>');
+        this.log('      --server <string>');
+        this.log('      --event <string>');
         this.log('  $ proof: Prove address ownership.');
         this.log('  $ register: Join an event.');
         this.log('      --nick <string>');
