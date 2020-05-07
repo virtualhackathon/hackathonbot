@@ -118,7 +118,8 @@ describe('HackathonDB', function() {
     await db.addUserToEventByNickAndServer({
       nick: user.nick,
       server: user.server,
-      event: event.name
+      event: event.name,
+      paid: true
     });
 
     const address = {
@@ -414,8 +415,10 @@ describe('HackathonDB', function() {
     const post = await db.getEventByName(event.name);
     assert.equal(post.name, event.name);
     assert.equal(post.open, update.open);
+
     assert.equal(post.btcFee, update.btcFee);
     assert.equal(post.hnsFee, update.hnsFee);
+
     assert.equal(post.link, update.link);
     assert.equal(post.message, update.message);
   });
@@ -544,7 +547,8 @@ describe('HackathonDB', function() {
       event: event.name,
       txid: '00'.repeat(32),
       type: 'btc',
-      outputIndex: 0
+      outputIndex: 0,
+      value: 100
     };
 
     await db.createPayment(payment);
@@ -617,6 +621,104 @@ describe('HackathonDB', function() {
 
     assert.equal(pair1.address.address, addrs[0])
     assert.equal(pair2.address.address, addrs[1])
+  });
+
+  it('should get payment addresses for event', async () => {
+    const event = {
+      name: `address-user-pairs`,
+      start: 1586372294397,
+      end: 1586372196415,
+      link: 'https://trust.a',
+      message: 'this is a msg',
+      ircUri: 'irc://irc.freenode.net:6667/#truth',
+      open: true
+    };
+
+    await db.createEvent(event);
+
+    const user = {
+      nick: `user-payment-test`,
+      server: 'irc.ifc.com',
+      isSponsor: false,
+      link: 'twitter.com/foobarbaz'
+    };
+
+    await db.createUser(user);
+
+    const btcAddress = 'bc1q9x9s2jref96cjagm905q0hmpm8vu9mrv9ft59s';
+    const hnsAddress = 'hs1qlmxql4cawdf9gtckash2qlhuautdldqvr3f2hd';
+
+    await db.addUserToEventByNickAndServer({
+      nick: user.nick,
+      server: user.server,
+      event: event.name,
+      btcAddress,
+      hnsAddress
+    });
+
+    const addresses = await db.getPaymentAddress(user.nick, user.server, event.name);
+
+    assert.equal(addresses.btcAddress, btcAddress);
+    assert.equal(addresses.hnsAddress, hnsAddress);
+  });
+
+  it('should get payment address by user nick', async () => {
+    const event = {
+      name: `address-by-nick`,
+      start: 1586372294397,
+      end: 1586372196415,
+      link: 'https://nick.to',
+      message: 'i am a machine',
+      ircUri: 'irc://irc.freenode.net:6667/#truth',
+      open: true
+    };
+
+    await db.createEvent(event);
+
+    const user = {
+      nick: `user-address-by-nick`,
+      server: 'irc.ifc.com',
+      isSponsor: false,
+      link: 'twitter.com/foobarbaz'
+    };
+
+    await db.createUser(user);
+
+    const btcAddress = 'bc1q9x9s2jref96cjagm905q0hmpm8vu9mrv9ft59s';
+    const hnsAddress = 'hs1qlmxql4cawdf9gtckash2qlhuautdldqvr3f2hd';
+
+    await db.addUserToEventByNickAndServer({
+      nick: user.nick,
+      server: user.server,
+      event: event.name,
+      btcAddress,
+      hnsAddress
+    });
+
+    {
+      const result = await db.getUserByPaymentAddress({
+        btcAddress
+      });
+
+      assert.equal(result.nick, user.nick);
+    }
+
+    {
+      const result = await db.getUserByPaymentAddress({
+        hnsAddress
+      });
+
+      assert.equal(result.nick, user.nick);
+    }
+
+    {
+      const result = await db.getUserByPaymentAddress({
+        hnsAddress,
+        btcAddress
+      });
+
+      assert.equal(result.nick, user.nick);
+    }
   });
 
   it('should get proven addresses', async () => {

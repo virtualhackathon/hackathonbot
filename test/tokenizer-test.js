@@ -18,7 +18,8 @@ describe('Tokenizer', function() {
         'key=value key2="this is a test"',
         {key: 'value', key2: '"this is a test"'}
       ],
-      ['key=0.001', {key: '0.001'}]
+      ['key=0.001', {key: '0.001'}],
+      ['key=https://github.com', {key: 'https://github.com'}]
     ];
 
     for (const test of tests) {
@@ -61,6 +62,11 @@ describe('Tokenizer', function() {
         'foo "bar ten" baz',
         'key1 key2 key3',
         {key1: 'foo', key2: '"bar ten"', key3: 'baz'}
+      ],
+      [
+        'https://github.com',
+        'link',
+        {link: 'https://github.com'}
       ]
     ];
 
