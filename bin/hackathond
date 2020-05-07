@@ -10,7 +10,7 @@ const server = new Hackathond({
 });
 
 process.on('unhandledRejection', (err, promise) => {
-  throw err;
+  console.error(err);
 });
 
 process.on('SIGINT', async () => {
@@ -18,9 +18,12 @@ process.on('SIGINT', async () => {
 });
 
 (async () => {
-  await server.ensure();
-  await server.open();
+  try {
+    await server.ensure();
+    await server.open();
+  } catch (e) {
+    console.log(e);
+  }
 })().catch((err) => {
   console.error(err.stack);
-  process.exit(1);
 });
