@@ -24,6 +24,14 @@ First start by running `hackathond`. The default HTTP server will
 listen on port `7870` and the admin HTTP server will listen on port
 `7871`.
 
+It depends on both `bcoin` and `hsd` running. The usual `bclient`
+and `hs-client` arguments can be passed, with the `bcoin-` and
+`hsd-` prefixes. The wallet clients accept similar configuration
+but with `hsd-wallet-` and `bcoin-wallet-` prefixes. See
+[hsd-cli](https://github.com/handshake-org/hs-client/blob/master/bin/hsd-cli)
+and [bcoin-cli](https://github.com/bcoin-org/bclient/blob/master/bin/bcoin-cli)
+for the full list of arguments that can be passed to the `NodeClient`.
+
 ```bash
 $ ./bin/hackathond
 ```
@@ -36,7 +44,11 @@ $ ./bin/event-daemon \
     --irc-uri 127.0.0.1 \
     --irc-channel '#hackathon' \
     --irc-admin-channel '#hackathon-admin' \
-    --log-level spam
+    --log-level spam \
+    --hsd-url "127.0.0.1" \
+    --hsd-network regtest \
+    --bcoin-url "127.0.0.1" \
+    --bcoin-network regtest
 ```
 
 The `event-daemon` will listen to two channels, the `irc-channel`
