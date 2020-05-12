@@ -25,7 +25,7 @@ used with any other applications.
 There are two main applications in `bin`, `hackathond` and the
 `event-daemon`. `hackathond` maintains a database behind a REST
 server and the `event-daemon` has an IRC Client, a `hackathond`
-REST client, a `bcoin` client and a `hsd` client. The `event-daemone
+REST client, a `bcoin` client and a `hsd` client. The `event-daemon`
 will listen to IRC for commands and call out to `hackathond`, `bcoin`
 and `hsd`. The state of the hackathons is stored in `hackathond`
 and `bcoin`/`hsd` are used for payments.
@@ -93,7 +93,7 @@ $ ./bin/hackathond
 
 Now start up the `event-daemon`.
 
-```
+```bash
 $ ./bin/event-daemon \
     --bot-nick HACKATHON_BOT \
     --irc-uri 127.0.0.1 \
