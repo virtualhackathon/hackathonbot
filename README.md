@@ -15,7 +15,10 @@ $ npm install
 To manage payments, this also depends on a Bitcoin full node and
 a Handshake full node. [bcoin](https://github.com/bcoin-org/bcoin)
 and [hsd](https://github.com/handshake-org/hsd) must be set up
-and configured correctly.
+and with wallets. By default, both use the wallets. This app
+will use addresses in the default wallet/account and it is
+recommended that the corresponding mnemonic is backed up and not
+used with any other applications.
 
 ## Set up
 
@@ -27,9 +30,54 @@ will listen to IRC for commands and call out to `hackathond`, `bcoin`
 and `hsd`. The state of the hackathons is stored in `hackathond`
 and `bcoin`/`hsd` are used for payments.
 
-First start by running `hackathond`. The default HTTP server will
+To start a `bcoin` node, use the command:
+
+```bash
+$ git clone https://github.com/bcoin-org/bcoin
+$ cd bcoin
+$ npm rebuild
+$ ./bin/bcoin --witness true
+```
+
+The [bcoin developer docs](https://github.com/bcoin-org/bcoin/blob/master/docs/configuration.md)
+are useful for seeing the various ways to configure `bcoin`. Note that `hsd` is a
+fork of `bcoin`, so most of the configuration options apply.
+
+To start an `hsd` node, use the command:
+
+```bash
+$ git clone https://github.com/handshake-org/hsd
+$ cd hsd
+$ npm install
+$ ./bin/hsd
+```
+
+The [hsd developer docs](https://hsd-dev.org/guides/config.html) explain how
+to fully configure `hsd`.
+
+
+Note that these can run on the same machine as `hackathond` if it
+is a relatively beefy machine, otherwise they should be ran on
+different machines. The `bcoin` and `hsd` HTTP/RPC clients
+support TLS, so using something like Let's Encrypt should be able
+to work if you name the machines that `bcoin`/`hsd` are running on.
+The appropriate ssl flags must be passed to `bcoin`/`hsd` for this
+to work. Please see the docs on Github for 
+
+`hackathond` will manage storing all of the information related
+to the hackathons themselves. The default HTTP server will
 listen on port `7870` and the admin HTTP server will listen on port
-`7871`.
+`7871`. The default directory used by `hackathond` is `~/.hackathond`.
+It uses a SQLite database which can be found in `~/.hackathond/hackathon.db`.
+To manually see entries in the database, use the command:
+
+```bash
+$ sqlite3 ~/.hackathond/hackathon.db
+```
+
+See `lib.sql.js` for useful SQL commands to run, along with
+the schemas for the tables.
+
 
 It depends on both `bcoin` and `hsd` running. The usual `bclient`
 and `hs-client` arguments can be passed, with the `bcoin-` and
@@ -68,7 +116,9 @@ The `spam` log level will log all messages in the IRC channels
 that the bot is connected to.
 
 There is also a CLI tool to interact with `hackathond` from
-outside of IRC.
+outside of IRC. This is useful for pulling various information
+out of the database without using the `sqlite3` command with
+raw SQL commands.
 
 ```
 $ ./bin/cli --help
