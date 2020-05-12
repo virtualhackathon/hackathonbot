@@ -12,13 +12,20 @@ $ cd hackathonbot
 $ npm install
 ```
 
+To manage payments, this also depends on a Bitcoin full node and
+a Handshake full node. [bcoin](https://github.com/bcoin-org/bcoin)
+and [hsd](https://github.com/handshake-org/hsd) must be set up
+and configured correctly.
+
 ## Set up
 
 There are two main applications in `bin`, `hackathond` and the
 `event-daemon`. `hackathond` maintains a database behind a REST
-server and the `event-daemon` has an IRC Client and a `hackathond`
-REST client. The `event-daemon` will listen to IRC and call out
-to `hackathond` via HTTP to get/post information to the database.
+server and the `event-daemon` has an IRC Client, a `hackathond`
+REST client, a `bcoin` client and a `hsd` client. The `event-daemone
+will listen to IRC for commands and call out to `hackathond`, `bcoin`
+and `hsd`. The state of the hackathons is stored in `hackathond`
+and `bcoin`/`hsd` are used for payments.
 
 First start by running `hackathond`. The default HTTP server will
 listen on port `7870` and the admin HTTP server will listen on port
@@ -76,20 +83,60 @@ event.
 
 The following commands are available from within the `irc-channel`:
 
-- .register
 - .newuser
+- .register
 - .events
 - .event
-- .eventaddresses
+- .tournaments
 - .users
+- .user
 - .newaddress
+- .eventaddresses
+- .paymentinfo
+- .bitcoininfo
+- .handshakeinfo
 - .help
 
 The following commands are available from within the `irc-admin-channel`:
 
 - .newevent
+- .updateevent
+- .newtournament
+- .updatetournament
+- .events
+- .event
 - .adminhelp
+
+## Running a Hackathon
+
+Admins must create events and tournaments. These can only be created
+in the admin channel. Users will not be able to join the event until
+it is updated to be opened. The `.newevent` command is used to create
+events and the `.updateevent` is used to update the event information.
+Events are made up of tournaments. A tournament is defined by an actionable
+task that must be completed by the end of the hackathon. A tournament
+has a percentage which corresponds to the total percentage of the event
+pot that will be paid out to the winner of that tournament. The tournaments
+can be updated by admins with the `.updatetournament` command.
+
+Users must first register into the system using the `.newuser` command
+before they are able to participate in any hackathons. The user must
+then use `.register` with an event. It is possible to see all of the
+possible events with the `.event` command.
+
+The `.eventinfo` command will print more detailed information about
+an event. This is useful to see all of the information you would want
+to know about a particular event.
+
+When a user registers for an event, if the event is pay to join then the
+user will get an address that they must send funds to. When the funds
+are received, the user will be marked as paid for that event.
+
+Users can also upload addresses that they control so that the admins
+can pay out the prize money to the winners. This is done with the
+`.newaddress` command.
 
 # License
 Copyright (c) 2019 SEED
+Copyright (c) 2020 Mark Tyneway
 
